@@ -43,6 +43,9 @@ class Schema
 
     public function create(Connection $connection, $table)
     {
+        // Remove id field as it is added by default
+        $this->fields = array_except($this->fields, 'id');
+
         EloquentSchema::connection($connection->id)->create($table, function (Blueprint $table) {
             $table->increments('id');
             foreach ($this->fields as $field => $type) {

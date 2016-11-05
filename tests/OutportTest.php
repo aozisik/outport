@@ -4,7 +4,32 @@ use Aozisik\Outport\Outport;
 
 class OutportTest extends TestCase
 {
-    public function testItMigratesDataCorrectly()
+
+    protected function runIntegrityTest($table, array $array)
+    {
+        $keys = array_keys($array[0]);
+        $path = (new Outport())->table($table, collect($array))->go();
+        $this->assertFileExists($path);
+
+        Config::set('database.connections.outport-test', [
+            'driver' => 'sqlite',
+            'database' => $path,
+            'prefix' => '',
+        ]);
+
+        $readFromSQLite = DB::connection('outport-test')
+            ->table($table)
+            ->select($keys)
+            ->get()
+            ->map(function ($item) {
+                return (array)$item;
+            })->toArray();
+
+        $this->assertEquals($array, $readFromSQLite);
+        unlink($path);
+    }
+
+    public function testItMigratesArbitraryDataCorrectly()
     {
         $books = [
             [
@@ -21,24 +46,29 @@ class OutportTest extends TestCase
             ]
         ];
 
-        $path = (new Outport())->table('books', collect($books))->go();
-        $this->assertFileExists($path);
+        $this->runIntegrityTest('books', $books);
+    }
 
-        Config::set('database.connections.outport-test', [
-            'driver' => 'sqlite',
-            'database' => $path,
-            'prefix' => '',
-        ]);
+    public function testItMigratesEloquentDataCorrectly()
+    {
+        $books = [
+            [
+                'id' => 1,
+                'title' => 'Pride and Prejudice',
+                'author' => 'Jane Austen'
+            ],
+            [
+                'id' => 2,
+                'title' => 'Oliver Twist',
+                'author' => 'Charles Dickens'
+            ],
+            [
+                'id' => 3,
+                'title' => 'The Fault in Our Stars',
+                'author' => 'John Green'
+            ]
+        ];
 
-        $readFromSQLite = DB::connection('outport-test')
-            ->table('books')
-            ->select('title', 'author')
-            ->get()
-            ->map(function ($item) {
-                return (array)$item;
-            })->toArray();
-
-        $this->assertEquals($books, $readFromSQLite);
-        unlink($path);
+        $this->runIntegrityTest('books', $books);
     }
 }
