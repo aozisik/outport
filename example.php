@@ -17,7 +17,7 @@ $books = collect([
 ]);
 
 $sqliteFile = (new Outport())
-    ->tableFromCollection('books', $books)
+    ->table('books', $books)
     ->go();
 
 echo $sqliteFile; // Path to your outported sqlite database

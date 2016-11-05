@@ -17,7 +17,7 @@ class Outport
         $this->connection = new Connection($path);
     }
 
-    public function tableFromCollection($table, Collection $collection)
+    public function table($table, Collection $collection)
     {
         if ($collection->count()) {
             $this->collections->put($table, $collection);
@@ -35,6 +35,7 @@ class Outport
                 $this->connection,
                 $table
             );
+
         });
 
         $this->connection->close();
