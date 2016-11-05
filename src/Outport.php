@@ -40,5 +40,6 @@ class Outport
         });
 
         $this->connection->close();
+        return $this->connection->path;
     }
 }
