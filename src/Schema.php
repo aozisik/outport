@@ -44,6 +44,7 @@ class Schema
     public function create(Connection $connection, $table)
     {
         EloquentSchema::connection($connection->id)->create($table, function (Blueprint $table) {
+            $table->increments('id');
             foreach ($this->fields as $field => $type) {
                 $table->$type($field)->nullable();
             }
