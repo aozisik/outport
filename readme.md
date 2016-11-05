@@ -1,5 +1,6 @@
 ##Outport
-**[Work In Progress]**
+
+[![Build Status](https://api.travis-ci.org/aozisik/outport.svg?branch=master)](https://travis-ci.org/aozisik/outport)
 
 Outport is a Laravel package that helps you create SQLite databases from arbitrary Laravel collections.
 Just pass in your collections and set table names.
