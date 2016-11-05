@@ -1,7 +1,8 @@
 {
   "name": "aozisik/outport",
-  "description": "Laravel package to export data from your models into a SqQLite database",
-  "type": "library",
+  "description": "Exports Laravel Collections to a single SQLite database",
+  "keywords": ["laravel", "collections", "export", "sqlite"],
+  "license": "MIT",
   "authors": [
     {
       "name": "Ahmet Ozisik",
