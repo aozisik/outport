@@ -2,7 +2,10 @@
 
 namespace Aozisik\Outport;
 
-use DB, Config;
+use DB
+use Config;
+use Exception;
+use Illuminate\Support\Collection;
 
 class Connection
 {
@@ -47,5 +50,13 @@ class Connection
     public function close()
     {
         DB::disconnect($this->id);
+    }
+
+    public function insert($table, Collection $collection)
+    {
+        if (!$this->link) {
+            throw new Exception("SQLite Connection not found");
+        }
+        $this->link->table($table)->insert($collection->toArray());
     }
 }

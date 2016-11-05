@@ -2,8 +2,6 @@
 
 namespace Aozisik\Outport;
 
-use DB;
-use Config;
 use Illuminate\Support\Collection;
 
 class Outport
@@ -29,13 +27,16 @@ class Outport
     {
         $this->connection->open();
 
-        $this->collections->each(function ($collection, $table) {
+        $this->collections->each(function (Collection $collection, $table) {
             // Migrate sqlite table
             Schema::fromCollection($collection)->create(
                 $this->connection,
                 $table
             );
-
+            // Insert data in chunks
+            $collection->chunk(30)->each(function ($chunk) use ($table) {
+                $this->connection->insert($table, $chunk);
+            });
         });
 
         $this->connection->close();
