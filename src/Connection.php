@@ -2,7 +2,7 @@
 
 namespace Aozisik\Outport;
 
-use DB
+use DB;
 use Config;
 use Exception;
 use Illuminate\Support\Collection;
