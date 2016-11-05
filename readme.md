@@ -25,7 +25,8 @@ Example use:
             'author' => 'Charles Dickens'
         ],
         [
-            'title' => ''
+            'title' => 'The Fault in Our Stars',
+            'author' => 'John Green'
         ]
     ]);
     
