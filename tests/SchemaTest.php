@@ -9,12 +9,14 @@ class SchemaTest extends TestCase
      * @var Connection
      */
     private $connection;
+    private $link;
 
     public function setUp()
     {
         parent::setUp();
         $this->connection = new Connection();
         $this->connection->open();
+        $this->link = Schema::connection($this->connection->id);
     }
 
     public function tearDown()
@@ -32,9 +34,29 @@ class SchemaTest extends TestCase
 
         $schema->create($this->connection, 'test');
 
-        $link = Schema::connection($this->connection->id);
-        $this->assertTrue($link->hasColumn('test', 'id'));
-        $this->assertTrue($link->hasColumn('test', 'a'));
-        $this->assertTrue($link->hasColumn('test', 'b'));
+
+        $this->assertTrue($this->link->hasColumn('test', 'id'));
+        $this->assertTrue($this->link->hasColumn('test', 'a'));
+        $this->assertTrue($this->link->hasColumn('test', 'b'));
+    }
+
+    public function testItCreatesIndexes()
+    {
+        $schema = new OutportSchema([
+            'a' => 'text',
+            'b' => 'integer'
+        ]);
+
+        $schema->create($this->connection, 'test', ['a']);
+        $indexes = collect(DB::connection($this->connection->id)->select('PRAGMA index_list(test)'))
+            ->map(function ($index) {
+                $matches = [];
+                preg_match('/^test_(.*?)_index$/', $index->name, $matches);
+                return $matches[1];
+            })->toArray();
+
+        $this->assertNotEmpty($indexes);
+        $this->assertContains('a', $indexes);
+        $this->assertNotContains('b', $indexes);
     }
 }

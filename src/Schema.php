@@ -41,15 +41,18 @@ class Schema
         return new Schema($fields);
     }
 
-    public function create(Connection $connection, $table)
+    public function create(Connection $connection, $table, array $indexes = [])
     {
         // Remove id field as it is added by default
         $this->fields = array_except($this->fields, 'id');
 
-        EloquentSchema::connection($connection->id)->create($table, function (Blueprint $table) {
+        EloquentSchema::connection($connection->id)->create($table, function (Blueprint $table) use ($indexes) {
             $table->increments('id');
             foreach ($this->fields as $field => $type) {
                 $table->$type($field)->nullable();
+            }
+            foreach ($indexes as $index) {
+                $table->index($index);
             }
         });
     }
