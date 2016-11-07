@@ -8,7 +8,7 @@ class OutportTest extends TestCase
     protected function runIntegrityTest($table, array $array)
     {
         $keys = array_keys($array[0]);
-        $path = (new Outport())->table($table, collect($array))->go();
+        $path = (new Outport())->table($table, collect($array), ['title'])->go();
         $this->assertFileExists($path);
 
         Config::set('database.connections.outport-test', [
