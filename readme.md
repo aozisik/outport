@@ -2,15 +2,15 @@
 ========
 
 
-Just pass in a Laravel collection and Outport will turn that into a SQLite database.
+Just pass in Laravel collections and Outport will put them all in a SQLite database.
     
 ##How do I use it?
 
-First, you should require this package through composer:
+You should first require this package through composer:
 
     composer require aozisik/outport
 
-Then it is as simple as this:
+Then simply:
 
     use Aozisik\Outport\Outport;
     
@@ -30,11 +30,10 @@ Then it is as simple as this:
 	]);
     
     $sqliteFile = (new Outport())
-        ->table('books', $books, ['author'])
+        ->table('books', $books, ['author']) // table name, collection, indexes
         ->go();
     
     echo $sqliteFile; // Path to your sqlite database
-
 
 ##I want details!
 
@@ -48,16 +47,13 @@ Outport will:
 + Insert data from your collection in chunks
 + Create indexes if asked
 
-At the end you will get a path to the resulting SQLite file, containing all the data you have just passed in. 
+A simple *go()* call will wrap it all together and spit out the path to your SQLite file, complete with the tables and indexes you want. 
 
-##Why would you want that?
+##Why would you want to output SQLite?
 
-Well, SQLite is a very compact format and it is very useful especially for mobile applications.
+SQLite is a very compact format, therefore it is widely used inside mobile applications.
 
-If you have a mobile app that needs to work offline and you need to pre-populate that application with data, Outport can help you by generating the initial SQLite file using whatever data you wish to put in.
-
-You can pull in data from your Eloquent models, from a third-party service, you name it. Just pass in your collection and use the SQLite file wherever you like.
-
-You can also do a more sophisticated implementation where you keep generated SQLite files as versions of your app database and create an endpoint to access these files. Now you have turned your Laravel app to an update server! 🙌
+I have created this package to help facilitate data transportation between my Laravel back-end and SQLite enabled mobile app.
+So if you need to pre-populate fresh copies of your app and/or push updates to existing copies through your Laravel back-end, this package will help you do that.
 
 Suggestions and pull requests are welcome!
