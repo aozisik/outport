@@ -34,7 +34,6 @@ class SchemaTest extends TestCase
 
         $schema->create($this->connection, 'test');
 
-
         $this->assertTrue($this->link->hasColumn('test', 'id'));
         $this->assertTrue($this->link->hasColumn('test', 'a'));
         $this->assertTrue($this->link->hasColumn('test', 'b'));
@@ -48,7 +47,8 @@ class SchemaTest extends TestCase
         ]);
 
         $schema->create($this->connection, 'test', ['a']);
-        $indexes = collect(DB::connection($this->connection->id)->select('PRAGMA index_list(test)'))
+        $indexes = collect(DB::connection($this->connection->id)
+            ->select('PRAGMA index_list(test)'))
             ->map(function ($index) {
                 $matches = [];
                 preg_match('/^test_(.*?)_index$/', $index->name, $matches);

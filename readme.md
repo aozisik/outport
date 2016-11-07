@@ -6,7 +6,7 @@ Just pass in a Laravel collection and Outport will turn that into a SQLite datab
     
 ##How do I use it?
 
-First you should require this package through composer:
+First, you should require this package through composer:
 
     composer require aozisik/outport
 
@@ -30,7 +30,7 @@ Then it is as simple as this:
 	]);
     
     $sqliteFile = (new Outport())
-        ->table('books', $books)
+        ->table('books', $books, ['author'])
         ->go();
     
     echo $sqliteFile; // Path to your sqlite database
@@ -46,6 +46,7 @@ Outport will:
 + Decide the best way to create tables for your collections
 + Create a SQLite database and migrate those tables
 + Insert data from your collection in chunks
++ Create indexes if asked
 
 At the end you will get a path to the resulting SQLite file, containing all the data you have just passed in. 
 
