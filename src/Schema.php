@@ -2,9 +2,9 @@
 
 namespace Aozisik\Outport;
 
-use Schema as EloquentSchema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema as EloquentSchema;
 
 class Schema
 {

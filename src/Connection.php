@@ -13,7 +13,7 @@ class Connection
     public $path;
     protected $link;
 
-    public function __construct($path = '')
+    public function __construct($path = null)
     {
         $this->path = $path;
         $this->id = uniqid('outport_');
