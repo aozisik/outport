@@ -27,7 +27,7 @@ class OutportTest extends TestCase
             return (array)$item;
         }, $readFromSQLite);
 
-        $this->assertEquals($array, $readFromSQLite);
+        $this->assertEquals(sort($array), sort($readFromSQLite));
         unlink($path);
     }
 
