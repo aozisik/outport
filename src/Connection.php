@@ -24,14 +24,24 @@ class Connection
         return storage_path('app/') . $this->id . '.sqlite';
     }
 
+    protected function touch($path)
+    {
+        if (file_exists($path)) {
+            return;
+        }
+        $dir = dirname($path);
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+        touch($path);
+    }
+
     protected function createSqliteFile()
     {
         if (is_null($this->path)) {
             $this->path = $this->getDefaultSqlitePath();
         }
-        if (!file_exists($this->path)) {
-            touch($this->path);
-        }
+        $this->touch($this->path);
     }
 
     public function open()
