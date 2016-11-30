@@ -9,6 +9,8 @@ Just pass in Laravel collections and Outport will put them all in a SQLite datab
 You should first require this package through composer:
 
     composer require aozisik/outport
+    
+**Note:** For Laravel 4.2, see [L4 branch](https://github.com/aozisik/outport/tree/L4).
 
 Then simply:
 
