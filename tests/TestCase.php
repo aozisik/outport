@@ -11,11 +11,20 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__ . '/../vendor/laravel/laravel/bootstrap/app.php';
+        $unitTesting = true;
+        $testEnvironment = 'testing';
+        $app = new Illuminate\Foundation\Application;
 
-        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+        $path = __DIR__ . '/../vendor/laravel/laravel';
 
+        $app->bindInstallPaths([
+            'app' => $path . '/app',
+            'public' => $path . '/public',
+            'base' => $path . '/',
+            'storage' => $path . '/app/storage',
+        ]);
+
+        require __DIR__ . '/../vendor/laravel/framework/src/Illuminate/Foundation/start.php';
         return $app;
     }
-
 }
