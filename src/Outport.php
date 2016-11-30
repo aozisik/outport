@@ -12,8 +12,8 @@ class Outport
 
     public function __construct($path = null)
     {
-        $this->indexes = collect([]);
-        $this->collections = collect([]);
+        $this->indexes = Collection::make([]);
+        $this->collections = Collection::make([]);
         $this->connection = new Connection($path);
     }
 
@@ -30,7 +30,7 @@ class Outport
     {
         $this->connection->open();
 
-        $this->collections->each(function (Collection $collection, $table) {
+        foreach ($this->collections as $table => $collection) {
             // Migrate sqlite table
             Schema::fromCollection($collection)->create(
                 $this->connection,
@@ -41,7 +41,7 @@ class Outport
             $collection->chunk(30)->each(function ($chunk) use ($table) {
                 $this->connection->insert($table, $chunk);
             });
-        });
+        }
 
         $this->connection->close();
         return $this->connection->path;

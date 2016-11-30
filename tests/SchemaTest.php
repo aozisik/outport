@@ -1,6 +1,7 @@
 <?php
 
 use Aozisik\Outport\Connection;
+use Illuminate\Support\Collection;
 use Aozisik\Outport\Schema as OutportSchema;
 
 class SchemaTest extends TestCase
@@ -47,7 +48,7 @@ class SchemaTest extends TestCase
         ]);
 
         $schema->create($this->connection, 'test', ['a']);
-        $indexes = collect(DB::connection($this->connection->id)
+        $indexes = Collection::make(DB::connection($this->connection->id)
             ->select('PRAGMA index_list(test)'))
             ->map(function ($index) {
                 $matches = [];

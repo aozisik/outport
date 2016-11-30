@@ -1,6 +1,7 @@
 <?php
 
 use Aozisik\Outport\Outport;
+use Illuminate\Support\Collection;
 
 class OutportTest extends TestCase
 {
@@ -8,7 +9,7 @@ class OutportTest extends TestCase
     protected function runIntegrityTest($table, array $array)
     {
         $keys = array_keys($array[0]);
-        $path = (new Outport())->table($table, collect($array), ['title'])->go();
+        $path = (new Outport())->table($table, Collection::make($array), ['title'])->go();
         $this->assertFileExists($path);
 
         Config::set('database.connections.outport-test', [
@@ -20,10 +21,11 @@ class OutportTest extends TestCase
         $readFromSQLite = DB::connection('outport-test')
             ->table($table)
             ->select($keys)
-            ->get()
-            ->map(function ($item) {
-                return (array)$item;
-            })->toArray();
+            ->get();
+
+        $readFromSQLite = array_map(function($item) {
+            return (array)$item;
+        }, $readFromSQLite);
 
         $this->assertEquals($array, $readFromSQLite);
         unlink($path);
